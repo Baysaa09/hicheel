@@ -72,4 +72,23 @@
                     tableContainer.innerHTML = ''; 
                 };
                 reader.readAsDataURL(file);
+                } else if (
+                file.name.endsWith(".xls") ||
+                file.name.endsWith(".xlsx")
+            ) {
+                reader.onload = function (event) {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const html = XLSX.utils.sheet_to_html(sheet);
+                    tableContainer.innerHTML = html;
+                    imagePreview.style.display = 'none'; 
+                };
+                reader.readAsArrayBuffer(file);
+
+            } else {
+                fileNameDisplay.textContent = ''; 
+            }
+        });
+    </script>
 
